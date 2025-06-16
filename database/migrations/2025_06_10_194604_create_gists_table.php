@@ -12,10 +12,10 @@ return new class extends Migration
             $table->id();
             $table->string('github_id')->unique();
             $table->string('username');
-            $table->string('title');
-            $table->text('content');
+            $table->text('title');
+            $table->longText('content');
             $table->string('language')->nullable();
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->timestamp('github_created_at');
             $table->timestamp('cached_at');
             $table->timestamps();

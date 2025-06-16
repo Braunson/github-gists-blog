@@ -1,61 +1,351 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# GitHub Gist Blog
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Transform GitHub Gists into blog interfaces with caching and real-time updates.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Dynamic Blog Generation**: Convert any GitHub user's public gists into a blog-style interface
+- **Smart Caching**: 4-hour cache with background refresh for optimal performance
+- **Real-time Search**: Livewire-powered filtering by username and programming language
+- **Queue-based Updates**: Background job processing for seamless user experience
+- **Responsive Design**: Beautiful Tailwind CSS interface that works on all devices
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠 Tech Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Backend**: Laravel 12, PHP 8.4+
+- **Frontend**: Blade templates, Livewire, Alpine.js, Tailwind CSS
+- **Database**: PostgreSQL
+- **Cache**: Redis
+- **Queue**: Laravel Queues with database driver
+- **API**: GitHub REST API v3
 
-## Learning Laravel
+## 📋 Prerequisites
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.4 or higher
+- Docker (for local Development)
+- Composer
+- Node.js & NPM
+- PostgreSQL
+- Redis (for production)
+- GitHub Personal Access Token
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🔧 Local Development Setup
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone and Install Dependencies
 
-## Laravel Sponsors
+```bash
+git clone https://github.com/yourusername/gist-blog.git
+cd gist-blog
+composer install
+npm install
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Environment Configuration
 
-### Premium Partners
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Update your `.env` file:
 
-## Contributing
+```env
+# GitHub API Token (public access only needed)
+GITHUB_TOKEN=your_github_personal_access_token
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Database Setup
 
-## Code of Conduct
+```bash
+php artisan migrate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 4. Build Assets & Start Development
 
-## Security Vulnerabilities
+```bash
+# Build frontend assets
+npm run build
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Start Laravel development server
+php artisan serve
 
-## License
+# In another terminal, start queue worker
+php artisan queue:work
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Visit `http://localhost` to see the application.
+
+## 🚀 Laravel Cloud Deployment
+
+### 1. Prepare Repository
+
+- Ensure your code is committed and pushed
+
+### 2. Laravel Cloud Setup
+
+1. **Connect Repository**:
+   - Log into [Laravel Cloud](https://cloud.laravel.com)
+   - Create new project
+   - Connect your GitHub repository
+
+2. **Environment Variables**:
+   Configure these in Laravel Cloud dashboard:
+   ```
+   GITHUB_TOKEN=your_github_token
+   APP_URL=https://your-app.laravel.cloud
+   ```
+
+3. **Database Configuration**:
+   - Laravel Cloud provides PostgreSQL automatically
+   - Database credentials are auto-configured
+
+4. **Redis Configuration**:
+   - Laravel Cloud provides Redis automatically
+   - Cache and session drivers are auto-configured
+
+5. **Queue Configuration**:
+   - Set `QUEUE_CONNECTION=database` in environment
+   - Laravel Cloud will auto-start queue workers
+
+### 3. Deploy
+
+```bash
+# Deploy via Laravel Cloud dashboard or CLI
+php artisan cloud:deploy
+```
+
+### 4. Post-Deployment
+
+```bash
+# Run migrations on production
+php artisan cloud:command "php artisan migrate --force"
+
+# Optional: Pre-populate popular users for demo
+php artisan cloud:command "php artisan tinker --execute=\"app(\App\Services\GistService::class)->syncUserGists('taylorotwell');\""
+```
+
+## 🧪 Testing
+
+### Test Structure
+
+```
+tests/
+├── Feature/
+│   ├── BlogControllerTest.php      # Route and controller tests
+│   ├── GistManagementTest.php      # End-to-end gist operations
+│   └── LivewireSearchTest.php      # Livewire component tests
+├── Unit/
+│   ├── GistServiceTest.php         # GitHub API service tests
+│   ├── GistModelTest.php           # Model methods and scopes
+│   └── JobsTest.php                # Queue job testing
+└── Mocks/
+    └── GitHubApiResponses.php      # Mock API responses
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+php artisan test
+
+# Run with coverage
+php artisan test --coverage
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
+
+# Run specific test file
+php artisan test tests/Feature/BlogControllerTest.php
+
+# Run tests with parallel processing
+php artisan test --parallel
+```
+
+### Test Categories
+
+#### 1. Unit Tests
+
+**GistServiceTest.php**:
+- ✅ Fetch user gists from GitHub API
+- ✅ Handle API rate limiting and errors
+- ✅ Parse gist data correctly
+- ✅ Cache gist responses
+- ✅ Sync individual gist content
+
+**GistModelTest.php**:
+- ✅ Model relationships and attributes
+- ✅ Cache expiration logic
+- ✅ Query scopes (forUsername, recent)
+- ✅ Data casting and mutators
+
+**JobsTest.php**:
+- ✅ RefreshUserGists job execution
+- ✅ Queue job retries and failures
+- ✅ Background processing workflow
+
+#### 2. Feature Tests
+
+**BlogControllerTest.php**:
+- ✅ Homepage displays recent gists and examples
+- ✅ User blog page loads and caches gists
+- ✅ Individual gist page displays content
+- ✅ Handles non-existent users gracefully
+- ✅ Queue dispatch for cache refresh
+
+**GistManagementTest.php**:
+- ✅ End-to-end gist fetching and storage
+- ✅ Cache invalidation workflows
+- ✅ Database transaction integrity
+- ✅ API error handling
+
+**LivewireSearchTest.php**:
+- ✅ Real-time search functionality
+- ✅ Language filtering
+- ✅ Component state management
+- ✅ DOM updates and interactions
+
+#### 3. HTTP Tests with Mocked APIs
+
+**GitHub API Mocking**:
+```php
+// Mock successful gist list response
+Http::fake([
+    'api.github.com/users/*/gists' => Http::response($this->mockGistsList(), 200),
+    'api.github.com/gists/*' => Http::response($this->mockSingleGist(), 200),
+]);
+```
+
+### Database Testing
+
+```bash
+# Use in-memory SQLite for speed
+# Configured in phpunit.xml
+
+# Test database migrations
+php artisan test --testsuite=Feature tests/Feature/DatabaseTest.php
+```
+
+### Performance Testing
+
+```bash
+# Test API response times
+php artisan test tests/Performance/ApiPerformanceTest.php
+
+# Test database query efficiency
+php artisan test tests/Performance/DatabasePerformanceTest.php
+```
+
+## 📊 Key Testing Scenarios
+
+### 1. GitHub API Integration
+- Mock GitHub API responses for consistent testing
+- Test rate limiting and error handling
+- Verify data parsing and storage
+
+### 2. Caching Strategy
+- Test cache hits and misses
+- Verify cache expiration logic
+- Test background refresh jobs
+
+### 3. User Experience
+- Test loading states for new users
+- Verify search and filtering functionality
+- Test responsive design elements
+
+### 4. Error Handling
+- Non-existent GitHub users
+- API rate limiting scenarios
+- Network connectivity issues
+- Invalid gist data
+
+## 🔍 Code Quality
+
+```bash
+# Static analysis with PHPStan
+./vendor/bin/phpstan analyse
+
+# Code formatting with PHP CS Fixer
+./vendor/bin/php-cs-fixer fix
+
+# Architecture testing with Pest
+php artisan test --testsuite=Architecture
+```
+
+## 📈 Performance Monitoring
+
+### Key Metrics to Monitor
+
+1. **GitHub API Usage**: Rate limiting and response times
+2. **Database Performance**: Query count and execution time
+3. **Cache Hit Ratio**: Redis performance and efficiency
+4. **Queue Processing**: Job completion rates and delays
+
+### Laravel Cloud Monitoring
+
+- Built-in performance monitoring
+- Database query analysis
+- Queue job tracking
+- Error logging and alerts
+
+## Troubleshooting
+
+### Common Issues
+
+**GitHub API Rate Limiting**:
+```bash
+# Check current rate limit status
+curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/rate_limit
+```
+
+**Queue Jobs Not Processing**:
+```bash
+# Restart queue workers
+php artisan queue:restart
+
+# Check failed jobs
+php artisan queue:failed
+```
+
+**Cache Issues**:
+```bash
+# Clear application cache
+php artisan cache:clear
+
+# Clear config cache
+php artisan config:clear
+```
+
+## 📝 API Endpoints
+
+- `GET /` - Homepage with recent gists and examples
+- `GET /{username}` - User's gist blog
+- `GET /{username}/{gistId}` - Individual gist view
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Write tests for new functionality
+4. Ensure all tests pass
+5. Submit a pull request
+
+## 📄 License
+
+This project is open-sourced software licensed under the [MIT license](LICENSE).
+
+## 🔗 Links
+
+- [Laravel Cloud Documentation](https://cloud.laravel.com/docs)
+- [GitHub API Documentation](https://docs.github.com/en/rest)
+- [Laravel Documentation](https://laravel.com/docs)
+- [Livewire Documentation](https://livewire.laravel.com)
+
+## Roadmap
+
+- Ability to claim and customize your own blog page
+- Ability to hide certain Gists
+
+---
+
+**Built with ❤️ from 🇨🇦**

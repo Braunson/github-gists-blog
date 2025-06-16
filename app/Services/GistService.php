@@ -21,25 +21,54 @@ class GistService
 
     private function fetchFromGitHub(string $username): array
     {
-        $response = Http::withToken(config('services.github.token'))
-            ->get("https://api.github.com/users/{$username}/gists");
+        try {
+            $response = Http::withToken(config('services.github.token'))
+                ->get("https://api.github.com/users/{$username}/gists");
 
-        if ($response->failed()) {
+            if ($response->failed()) {
+                return [];
+            }
+
+            return $response->json();
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            // Handle network timeouts and connection issues
+            logger()->warning("GitHub API connection error for user {$username}: " . $e->getMessage());
+            return [];
+        } catch (\Exception $e) {
+            // Handle any other exceptions
+            logger()->error("GitHub API error for user {$username}: " . $e->getMessage());
             return [];
         }
-
-        return $response->json();
     }
-
     public function syncUserGists(string $username): void
     {
-        $gists = $this->fetchFromGitHub($username);
+        $gists = $this->getUserGists($username);
 
         foreach ($gists as $gistData) {
-            $this->createOrUpdateGist($username, $gistData);
+            // Fetch individual gist to get full content
+            $fullGist = $this->fetchSingleGist($gistData['id']);
+            if ($fullGist) {
+                $this->createOrUpdateGist($username, $fullGist);
+            }
         }
     }
 
+    private function fetchSingleGist(string $gistId): ?array
+    {
+        try {
+            $response = Http::withToken(config('services.github.token'))
+                ->timeout(30)
+                ->get("https://api.github.com/gists/{$gistId}");
+
+            return $response->successful() ? $response->json() : null;
+        } catch (\Illuminate\Http\Client\ConnectionException $e) {
+            logger()->warning("GitHub API connection error for gist {$gistId}: " . $e->getMessage());
+            return null;
+        } catch (\Exception $e) {
+            logger()->error("GitHub API error for gist {$gistId}: " . $e->getMessage());
+            return null;
+        }
+    }
     private function createOrUpdateGist(string $username, array $gistData): void
     {
         $firstFile = collect($gistData['files'])->first();
