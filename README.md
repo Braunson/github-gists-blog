@@ -264,12 +264,6 @@ php artisan test tests/Performance/DatabasePerformanceTest.php
 ```bash
 # Static analysis with PHPStan
 ./vendor/bin/phpstan analyse
-
-# Code formatting with PHP CS Fixer
-./vendor/bin/php-cs-fixer fix
-
-# Architecture testing with Pest
-php artisan test --testsuite=Architecture
 ```
 
 ## 📈 Performance Monitoring
