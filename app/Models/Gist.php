@@ -15,7 +15,7 @@ class Gist extends Model
         'language',
         'description',
         'github_created_at',
-        'cached_at'
+        'cached_at',
     ];
 
     protected $casts = [

@@ -8,13 +8,14 @@ use Livewire\Component;
 class SearchFilter extends Component
 {
     public $search = '';
+
     public $language = '';
 
     public function render()
     {
         $gists = Gist::query()
-            ->when($this->search, fn($q) => $q->where('username', 'like', "%{$this->search}%"))
-            ->when($this->language, fn($q) => $q->where('language', $this->language))
+            ->when($this->search, fn ($q) => $q->where('username', 'like', "%{$this->search}%"))
+            ->when($this->language, fn ($q) => $q->where('language', $this->language))
             ->recent()
             ->take(20)
             ->get()

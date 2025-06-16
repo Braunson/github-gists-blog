@@ -2,15 +2,15 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\Attributes\Test;
-use Tests\TestCase;
-use Tests\Mocks\GitHubApiResponses;
-use App\Services\GistService;
 use App\Models\Gist;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
+use App\Services\GistService;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Mocks\GitHubApiResponses;
+use Tests\TestCase;
 
 class GistServiceTest extends TestCase
 {

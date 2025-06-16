@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
-use Tests\Mocks\GitHubApiResponses;
 use App\Models\Gist;
 use App\Services\GistService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Mocks\GitHubApiResponses;
+use Tests\TestCase;
 
 class GistManagementTest extends TestCase
 {
@@ -104,10 +104,10 @@ class GistManagementTest extends TestCase
                         'updated-version.php' => [
                             'filename' => 'updated-version.php',
                             'language' => 'PHP',
-                            'content' => null
-                        ]
-                    ]
-                ]
+                            'content' => null,
+                        ],
+                    ],
+                ],
             ], 200),
             'api.github.com/gists/old123' => Http::response([
                 'id' => 'old123',
@@ -117,9 +117,9 @@ class GistManagementTest extends TestCase
                     'updated-version.php' => [
                         'filename' => 'updated-version.php',
                         'language' => 'PHP',
-                        'content' => 'updated content with new features'
-                    ]
-                ]
+                        'content' => 'updated content with new features',
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -211,10 +211,10 @@ class GistManagementTest extends TestCase
                         'large-file.js' => [
                             'filename' => 'large-file.js',
                             'language' => 'JavaScript',
-                            'content' => null
-                        ]
-                    ]
-                ]
+                            'content' => null,
+                        ],
+                    ],
+                ],
             ], 200),
             'api.github.com/gists/large123' => Http::response([
                 'id' => 'large123',
@@ -224,9 +224,9 @@ class GistManagementTest extends TestCase
                     'large-file.js' => [
                         'filename' => 'large-file.js',
                         'language' => 'JavaScript',
-                        'content' => $largeContent
-                    ]
-                ]
+                        'content' => $largeContent,
+                    ],
+                ],
             ], 200),
         ]);
 
@@ -243,10 +243,10 @@ class GistManagementTest extends TestCase
     {
         Http::fake([
             'api.github.com/users/user1/gists' => Http::response([
-                GitHubApiResponses::gistsList()[0] // First gist only
+                GitHubApiResponses::gistsList()[0], // First gist only
             ], 200),
             'api.github.com/users/user2/gists' => Http::response([
-                GitHubApiResponses::gistsList()[1] // Second gist only
+                GitHubApiResponses::gistsList()[1], // Second gist only
             ], 200),
             'api.github.com/gists/abc123' => Http::response(
                 GitHubApiResponses::singleGist('abc123'),
@@ -331,10 +331,10 @@ class GistManagementTest extends TestCase
                         'updated.php' => [
                             'filename' => 'updated.php',
                             'language' => 'PHP',
-                            'content' => null
-                        ]
-                    ]
-                ]
+                            'content' => null,
+                        ],
+                    ],
+                ],
             ], 200),
             'api.github.com/gists/update123' => Http::response([
                 'id' => 'update123',
@@ -344,9 +344,9 @@ class GistManagementTest extends TestCase
                     'updated.php' => [
                         'filename' => 'updated.php',
                         'language' => 'PHP',
-                        'content' => 'updated content'
-                    ]
-                ]
+                        'content' => 'updated content',
+                    ],
+                ],
             ], 200),
         ]);
 

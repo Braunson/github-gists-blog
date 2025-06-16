@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 use App\Models\Gist;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class GistModelTest extends TestCase
 {
@@ -23,10 +23,10 @@ class GistModelTest extends TestCase
             'language',
             'description',
             'github_created_at',
-            'cached_at'
+            'cached_at',
         ];
 
-        $gist = new Gist();
+        $gist = new Gist;
         $this->assertEquals($fillable, $gist->getFillable());
     }
 
@@ -225,6 +225,7 @@ class GistModelTest extends TestCase
     {
         if (\DB::getDriverName() === 'sqlite') {
             $this->markTestSkipped('Index testing not supported on SQLite in this test environment');
+
             return;
         }
 

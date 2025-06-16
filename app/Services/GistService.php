@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\Gist;
-use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class GistService
 {
@@ -15,7 +15,7 @@ class GistService
         return cache()->remember(
             $cacheKey,
             now()->addHours(4),
-            fn() => $this->fetchFromGitHub($username)
+            fn () => $this->fetchFromGitHub($username)
         );
     }
 
@@ -32,14 +32,17 @@ class GistService
             return $response->json();
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
             // Handle network timeouts and connection issues
-            logger()->warning("GitHub API connection error for user {$username}: " . $e->getMessage());
+            logger()->warning("GitHub API connection error for user {$username}: ".$e->getMessage());
+
             return [];
         } catch (\Exception $e) {
             // Handle any other exceptions
-            logger()->error("GitHub API error for user {$username}: " . $e->getMessage());
+            logger()->error("GitHub API error for user {$username}: ".$e->getMessage());
+
             return [];
         }
     }
+
     public function syncUserGists(string $username): void
     {
         $gists = $this->getUserGists($username);
@@ -62,13 +65,16 @@ class GistService
 
             return $response->successful() ? $response->json() : null;
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
-            logger()->warning("GitHub API connection error for gist {$gistId}: " . $e->getMessage());
+            logger()->warning("GitHub API connection error for gist {$gistId}: ".$e->getMessage());
+
             return null;
         } catch (\Exception $e) {
-            logger()->error("GitHub API error for gist {$gistId}: " . $e->getMessage());
+            logger()->error("GitHub API error for gist {$gistId}: ".$e->getMessage());
+
             return null;
         }
     }
+
     private function createOrUpdateGist(string $username, array $gistData): void
     {
         $firstFile = collect($gistData['files'])->first();

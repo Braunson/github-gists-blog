@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-
-use PHPUnit\Framework\Attributes\Test;
-use Tests\Mocks\GitHubApiResponses;
-use App\Models\Gist;
 use App\Jobs\RefreshUserGists;
+use App\Models\Gist;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
-use Carbon\Carbon;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Mocks\GitHubApiResponses;
+use Tests\TestCase;
 
 class BlogControllerTest extends TestCase
 {

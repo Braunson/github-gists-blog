@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use App\Livewire\SearchFilter;
 use App\Models\Gist;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Carbon\Carbon;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class LivewireSearchTest extends TestCase
 {
@@ -198,10 +198,10 @@ class LivewireSearchTest extends TestCase
 
         // Verify grouping structure in the response
         $component->assertSee('taylor')
-                  ->assertSee('(2 gists)'); // Taylor has 2 gists
+            ->assertSee('(2 gists)'); // Taylor has 2 gists
 
         $component->assertSee('nuno')
-                  ->assertSee('(1 gists)'); // Nuno has 1 gist
+            ->assertSee('(1 gists)'); // Nuno has 1 gist
     }
 
     #[Test]
@@ -257,11 +257,11 @@ class LivewireSearchTest extends TestCase
 
         // Should only show 4 gists for this user
         $component->assertSee('File 1')
-                  ->assertSee('File 2')
-                  ->assertSee('File 3')
-                  ->assertSee('File 4')
-                  ->assertDontSee('File 5')
-                  ->assertDontSee('File 6');
+            ->assertSee('File 2')
+            ->assertSee('File 3')
+            ->assertSee('File 4')
+            ->assertDontSee('File 5')
+            ->assertDontSee('File 6');
     }
 
     #[Test]
@@ -271,17 +271,17 @@ class LivewireSearchTest extends TestCase
 
         // Initial state shows all users
         $component->assertSee('taylor')
-                  ->assertSee('nuno');
+            ->assertSee('nuno');
 
         // Type 't' - should show taylor
         $component->set('search', 't')
-                  ->assertSee('taylor')
-                  ->assertDontSee('nuno');
+            ->assertSee('taylor')
+            ->assertDontSee('nuno');
 
         // Clear search - should show all again
         $component->set('search', '')
-                  ->assertSee('taylor')
-                  ->assertSee('nuno');
+            ->assertSee('taylor')
+            ->assertSee('nuno');
     }
 
     #[Test]
@@ -291,18 +291,18 @@ class LivewireSearchTest extends TestCase
 
         // Initial state shows all languages
         $component->assertSee('PHP')
-                  ->assertSee('JavaScript');
+            ->assertSee('JavaScript');
 
         // Select PHP only
         $component->set('language', 'PHP')
-                  ->assertSee('Helper Functions')
-                  ->assertSee('Laravel Helpers')
-                  ->assertDontSee('Vue Component');
+            ->assertSee('Helper Functions')
+            ->assertSee('Laravel Helpers')
+            ->assertDontSee('Vue Component');
 
         // Back to all languages
         $component->set('language', '')
-                  ->assertSee('Helper Functions')
-                  ->assertSee('Vue Component');
+            ->assertSee('Helper Functions')
+            ->assertSee('Vue Component');
     }
 
     #[Test]
@@ -343,7 +343,7 @@ class LivewireSearchTest extends TestCase
 
         // Check for correct route generation
         $component->assertSee(route('blog.show', 'taylor'))
-                  ->assertSee(route('blog.gist', ['taylor', 'php1']));
+            ->assertSee(route('blog.gist', ['taylor', 'php1']));
     }
 
     #[Test]
@@ -364,12 +364,12 @@ class LivewireSearchTest extends TestCase
 
         // Simulate rapid typing
         $component->set('search', 't')
-                  ->set('search', 'ta')
-                  ->set('search', 'tay')
-                  ->set('search', 'tayl')
-                  ->set('search', 'taylo')
-                  ->set('search', 'taylor')
-                  ->assertSee('taylor')
-                  ->assertDontSee('nuno');
+            ->set('search', 'ta')
+            ->set('search', 'tay')
+            ->set('search', 'tayl')
+            ->set('search', 'taylo')
+            ->set('search', 'taylor')
+            ->assertSee('taylor')
+            ->assertDontSee('nuno');
     }
 }

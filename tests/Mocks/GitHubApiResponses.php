@@ -15,9 +15,9 @@ class GitHubApiResponses
                     'helpers.php' => [
                         'filename' => 'helpers.php',
                         'language' => 'PHP',
-                        'content' => null // Not included in list endpoint
-                    ]
-                ]
+                        'content' => null, // Not included in list endpoint
+                    ],
+                ],
             ],
             [
                 'id' => 'def456',
@@ -27,9 +27,9 @@ class GitHubApiResponses
                     'UserCard.vue' => [
                         'filename' => 'UserCard.vue',
                         'language' => 'Vue',
-                        'content' => null
-                    ]
-                ]
+                        'content' => null,
+                    ],
+                ],
             ],
             [
                 'id' => 'ghi789',
@@ -39,10 +39,10 @@ class GitHubApiResponses
                     'untitled.txt' => [
                         'filename' => 'untitled.txt',
                         'language' => null,
-                        'content' => null
-                    ]
-                ]
-            ]
+                        'content' => null,
+                    ],
+                ],
+            ],
         ];
     }
 
@@ -74,9 +74,9 @@ function truncate_string($string, $limit = 100)
 function is_valid_email($email)
 {
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
-}'
-                    ]
-                ]
+}',
+                    ],
+                ],
             ],
             'def456' => [
                 'id' => 'def456',
@@ -112,9 +112,9 @@ export default {
   padding: 16px;
   text-align: center;
 }
-</style>'
-                    ]
-                ]
+</style>',
+                    ],
+                ],
             ],
             'ghi789' => [
                 'id' => 'ghi789',
@@ -124,10 +124,10 @@ export default {
                     'untitled.txt' => [
                         'filename' => 'untitled.txt',
                         'language' => null,
-                        'content' => 'Just some random notes for testing purposes.'
-                    ]
-                ]
-            ]
+                        'content' => 'Just some random notes for testing purposes.',
+                    ],
+                ],
+            ],
         ];
 
         return $gists[$gistId] ?? $gists['abc123'];
@@ -142,7 +142,7 @@ export default {
     {
         return [
             'message' => 'Not Found',
-            'documentation_url' => 'https://docs.github.com/rest'
+            'documentation_url' => 'https://docs.github.com/rest',
         ];
     }
 
@@ -150,7 +150,7 @@ export default {
     {
         return [
             'message' => 'API rate limit exceeded',
-            'documentation_url' => 'https://docs.github.com/rest'
+            'documentation_url' => 'https://docs.github.com/rest',
         ];
     }
 }

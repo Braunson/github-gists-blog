@@ -2,16 +2,16 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use PHPUnit\Framework\Attributes\Test;
-use Tests\Mocks\GitHubApiResponses;
 use App\Jobs\RefreshUserGists;
-use App\Services\GistService;
 use App\Models\Gist;
+use App\Services\GistService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Queue;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\Mocks\GitHubApiResponses;
+use Tests\TestCase;
 
 class JobsTest extends TestCase
 {
@@ -29,9 +29,9 @@ class JobsTest extends TestCase
         // Mock the GistService
         $mockService = Mockery::mock(GistService::class);
         $mockService->shouldReceive('syncUserGists')
-                   ->once()
-                   ->with('testuser')
-                   ->andReturn(null);
+            ->once()
+            ->with('testuser')
+            ->andReturn(null);
 
         $this->app->instance(GistService::class, $mockService);
 
@@ -89,7 +89,7 @@ class JobsTest extends TestCase
         $this->assertDatabaseHas('gists', [
             'username' => 'testuser',
             'github_id' => 'abc123',
-            'title' => 'helpers.php'
+            'title' => 'helpers.php',
         ]);
     }
 
