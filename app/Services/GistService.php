@@ -22,7 +22,14 @@ class GistService
     private function fetchFromGitHub(string $username): array
     {
         try {
-            $response = Http::withToken(config('services.github.token'))
+            $gitHubToken = config('services.github.token');
+
+            throw_if(
+                ! $gitHubToken,
+                new \InvalidArgumentException('GitHub token is not configured.')
+            );
+
+            $response = Http::withToken($gitHubToken)
                 ->get("https://api.github.com/users/{$username}/gists");
 
             if ($response->failed()) {

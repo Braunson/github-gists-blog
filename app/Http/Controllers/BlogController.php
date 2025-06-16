@@ -4,15 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Jobs\RefreshUserGists;
 use App\Models\Gist;
-use App\Services\GistService;
 use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function __construct(
-        private GistService $gistService
-    ) {}
-
     public function index(): View
     {
         $recentGists = Gist::query()

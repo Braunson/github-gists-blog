@@ -23,12 +23,12 @@ class Gist extends Model
         'cached_at' => 'datetime',
     ];
 
-    public function scopeForUsername($query, $username): Builder
+    public function scopeForUsername(Builder $query, string $username): Builder
     {
         return $query->where('username', $username);
     }
 
-    public function scopeRecent($query): Builder
+    public function scopeRecent(Builder $query): Builder
     {
         return $query->orderBy('github_created_at', 'desc');
     }

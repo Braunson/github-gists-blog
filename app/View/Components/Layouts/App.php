@@ -3,14 +3,15 @@
 namespace App\View\Components\Layouts;
 
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class App extends Component
 {
     public function __construct(
-        public $title = null
+        public ?string $title = null
     ) {}
 
-    public function render()
+    public function render(): View
     {
         return view('layouts.app');
     }

@@ -1,0 +1,12 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+
+parameters:
+    paths:
+        - app/
+    level: 8
+    ignoreErrors:
+        - "#return type has no value type specified in iterable type array.#"
+        - "#Unable to resolve the template type [a-zA-Z]+ in call to function#"
+        - "#with no value type specified in iterable type array.#"

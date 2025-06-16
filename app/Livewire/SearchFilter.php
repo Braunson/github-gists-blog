@@ -3,15 +3,16 @@
 namespace App\Livewire;
 
 use App\Models\Gist;
+use Illuminate\View\View;
 use Livewire\Component;
 
 class SearchFilter extends Component
 {
-    public $search = '';
+    public string $search = '';
 
-    public $language = '';
+    public string $language = '';
 
-    public function render()
+    public function render(): View
     {
         $gists = Gist::query()
             ->when($this->search, fn ($q) => $q->where('username', 'like', "%{$this->search}%"))
