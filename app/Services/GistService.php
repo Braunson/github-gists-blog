@@ -4,15 +4,17 @@ namespace App\Services;
 
 use App\Models\Gist;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Pool;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class GistService
 {
     private const CACHE_HOURS = 4;
+
     private const BATCH_SIZE = 20;
+
     private const MAX_CONCURRENT_REQUESTS = 5;
 
     public function getUserGists(string $username): array
@@ -47,9 +49,11 @@ class GistService
             return $response->json();
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
             logger()->warning("GitHub API connection error for user {$username}: ".$e->getMessage());
+
             return [];
         } catch (\Exception $e) {
             logger()->error("GitHub API error for user {$username}: ".$e->getMessage());
+
             return [];
         }
     }
@@ -57,7 +61,7 @@ class GistService
     public function syncUserGists(string $username): void
     {
         $gists = $this->getUserGists($username);
-        
+
         if (empty($gists)) {
             return;
         }
@@ -78,8 +82,8 @@ class GistService
     {
         return collect($gists)->filter(function ($gist) use ($existingGists) {
             $existingGist = $existingGists->get($gist['id']);
-            
-            if (!$existingGist) {
+
+            if (! $existingGist) {
                 return true;
             }
 
@@ -94,12 +98,10 @@ class GistService
         $allGists = [];
 
         foreach ($gistChunks as $chunk) {
-            $responses = Http::pool(fn (Pool $pool) => 
-                collect($chunk)->map(fn ($gistId) => 
-                    $pool->withToken(config('services.github.token'))
-                        ->timeout(30)
-                        ->get("https://api.github.com/gists/{$gistId}")
-                )
+            $responses = Http::pool(fn (Pool $pool) => collect($chunk)->map(fn ($gistId) => $pool->withToken(config('services.github.token'))
+                ->timeout(30)
+                ->get("https://api.github.com/gists/{$gistId}")
+            )
             );
 
             foreach ($responses as $index => $response) {
@@ -141,9 +143,11 @@ class GistService
             return $response->successful() ? $response->json() : null;
         } catch (\Illuminate\Http\Client\ConnectionException $e) {
             logger()->warning("GitHub API connection error for gist {$gistId}: ".$e->getMessage());
+
             return null;
         } catch (\Exception $e) {
             logger()->error("GitHub API error for gist {$gistId}: ".$e->getMessage());
+
             return null;
         }
     }
