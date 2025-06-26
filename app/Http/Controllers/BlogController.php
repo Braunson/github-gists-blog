@@ -28,6 +28,8 @@ class BlogController extends Controller
         $needsRefresh = $isFirstVisit || $userGists->first()?->isCacheExpired();
 
         if ($needsRefresh && ! $this->isJobAlreadyQueued($username)) {
+            logger()->debug('Dispatching job to refresh gists for user: ' . $username);
+
             RefreshUserGists::dispatch($username);
             $this->markJobAsQueued($username);
         }

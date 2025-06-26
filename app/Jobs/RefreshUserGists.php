@@ -21,8 +21,14 @@ class RefreshUserGists implements ShouldQueue
     {
         try {
             $gistService->syncUserGists($this->username);
+            logger()->info('Successfully refreshed gists for user: ' . $this->username);
+
             cache()->forget("github_sync_job_{$this->username}");
         } catch (\Exception $e) {
+            logger()->error('Failed to refresh gists for user: ' . $this->username, [
+                'error' => $e->getMessage(),
+            ]);
+
             cache()->forget("github_sync_job_{$this->username}");
             throw $e;
         }
