@@ -16,8 +16,9 @@ Transform GitHub Gists into blog interfaces with caching and real-time updates.
 - **Frontend**: Blade templates, Livewire, Alpine.js, Tailwind CSS
 - **Database**: PostgreSQL
 - **Cache**: Redis
-- **Queue**: Laravel Queues with database driver
+- **Queue**: Laravel queues with Redis driver
 - **API**: GitHub REST API v3
+- **Local Development**: Laravel Sail
 
 ## 📋 Prerequisites
 
@@ -34,8 +35,8 @@ Transform GitHub Gists into blog interfaces with caching and real-time updates.
 ### 1. Clone and Install Dependencies
 
 ```bash
-git clone https://github.com/yourusername/gist-blog.git
-cd gist-blog
+git clone https://github.com/Braunson/github-gists-blog.git
+cd github-gists-blog
 composer install
 npm install
 ```
@@ -89,10 +90,9 @@ Visit `http://localhost` to see the application.
    - Connect your GitHub repository
 
 2. **Environment Variables**:
-   Configure these in Laravel Cloud dashboard:
+   Configure these in Laravel Cloud environment:
    ```
    GITHUB_TOKEN=your_github_token
-   APP_URL=https://your-app.laravel.cloud
    ```
 
 3. **Database Configuration**:
@@ -104,23 +104,21 @@ Visit `http://localhost` to see the application.
    - Cache and session drivers are auto-configured
 
 5. **Queue Configuration**:
-   - Set `QUEUE_CONNECTION=database` in environment
+   - Laravel Cloud sets your queue connection as automatically (assuming you configured them ahead of time)
    - Laravel Cloud will auto-start queue workers
 
 ### 3. Deploy
 
-```bash
-# Deploy via Laravel Cloud dashboard or CLI
-php artisan cloud:deploy
-```
+- Set up push to deploy in Laravel Cloud or manually deploy in the Laravel Cloud UI.
 
 ### 4. Post-Deployment
 
 ```bash
-# Run migrations on production
-php artisan cloud:command "php artisan migrate --force"
+# Run migrations on production with seeds (optional)
+# NOTE: Laravel Cloud will automatically run this by default on a deploy excluding the seed flag unless you've modified the deployment commands from their default state
+php artisan cloud:command "php artisan migrate --seed --force"
 
-# Optional: Pre-populate popular users for demo
+# Optional: Pre-populate a specific users on the fly instead of using the seeder
 php artisan cloud:command "php artisan tinker --execute=\"app(\App\Services\GistService::class)->syncUserGists('taylorotwell');\""
 ```
 
@@ -157,9 +155,6 @@ php artisan test --testsuite=Unit
 
 # Run specific test file
 php artisan test tests/Feature/BlogControllerTest.php
-
-# Run tests with parallel processing
-php artisan test --parallel
 ```
 
 ### Test Categories
