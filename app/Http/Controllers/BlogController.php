@@ -23,9 +23,11 @@ class BlogController extends Controller
 
     public function show(string $username): View
     {
-        $userGists = Gist::forUsername($username)->get();
-        $isFirstVisit = $userGists->isEmpty();
-        $needsRefresh = $isFirstVisit || $userGists->first()?->isCacheExpired();
+        $userGists = Gist::query()->forUsername($username)->get();
+
+        $firstGist = $userGists->first();
+        $isFirstVisit = is_null($firstGist);
+        $needsRefresh = $isFirstVisit || $firstGist?->isCacheExpired();
 
         if ($needsRefresh && ! $this->isJobAlreadyQueued($username)) {
             logger()->debug('Dispatching job to refresh gists for user: '.$username);
